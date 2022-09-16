@@ -66,7 +66,7 @@ WHERE email LIKE "J%@gmail.com";
 --    Enter the one email address returned (you will likely need to scroll to the right) below.
 --F.  jubarnett@gmail.com
 
---7.  Run Query: Find all the invoices from the billing city Brasília, Edmonton, and Vancouver and sort in descending order by invoice ID.
+--7.  Run Query: Find all the invoices from the billing city BrasÃ­lia, Edmonton, and Vancouver and sort in descending order by invoice ID.
 SELECT invoiceID
 	,billingCity
 	,total
