@@ -1,0 +1,485 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+----
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000 records
+ii. Business table = 10000 records
+iii. Category table = 10000 records
+iv. Checkin table = 10000 records
+v. elite_years table = 10000 records
+vi. friend table =  10000 records
+vii. hours table = 10000 records
+viii. photo table =  10000 records
+ix. review table =  10000 records
+x. tip table =  10000 records
+xi. user table = 10000 records
+
+Sample Code (Including NULL values)
+----
+
+Select count (*) as total_records
+From business
+
++---------------+
+| Total_records |
++---------------+
+|         10000 |
++---------------+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = 44.092
+ii. Hours = 3.614
+iii. Category = 3.355
+iv. Attribute = 1.285
+v. Review = 40.568
+vi. CheckIn = 697
+vii. Photo = 21.194
+viii Tip = 16.751
+ix User = 18.944
+x. Friend = 9.426
+xi. Elite_years = 2.793
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.
+
+Sample Code
+----
+
+Select count (distinct name) + count (distinct business_id) + count (distinct value) as Total_Records
+From attribute
+
++---------------+
+| Total_Records |
++---------------+
+|          1285 |
++---------------+ 
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: Zero rows in the User Table
+	
+Sample Code
+----
+
+	SQL code used to arrive at answer:
+	SELECT COUNT(*)
+	FROM user
+	WHERE id IS NULL
+		OR name IS NULL
+		OR review_count IS NULL
+		OR yelping_since IS NULL
+		OR useful IS NULL
+		OR funny IS NULL
+		OR cool IS NULL
+		OR fans IS NULL
+		OR average_stars IS NULL
+		OR compliment_hot IS NULL
+		OR compliment_more IS NULL
+		OR compliment_profile IS NULL
+		OR compliment_cute IS NULL
+		OR compliment_list IS NULL
+		OR compliment_note IS NULL
+		OR compliment_plain IS NULL
+		OR compliment_cool IS NULL
+		OR compliment_funny IS NULL
+		OR compliment_writer IS NULL
+		OR compliment_photos IS NULL
+    
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min:1		            max:5		            avg:3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min:1.0		          max:5.0		          avg:3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min:0		            max:2		            avg:0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min:1		            max:53		          avg:1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min:0		            max:2000	          avg:24.2995
+    
+Sample Code
+----
+
+Select 
+min  (stars)
+, max (stars)
+, avg (stars)
+From review;
+
+
+
++------------+------------+------------+
+| min(stars) | max(stars) | avg(stars) |
++------------+------------+------------+
+|          1 |          5 |     3.7082 |
++------------+------------+------------+
+
+5. List the cities with the most reviews in descending order:
+
+Sample Code
+----
+
+Select city
+, count (review_count) as total_review
+From business
+Group by city
+Order by total_review DESC
+
++-----------------+--------------+
+| city            | total_review |
++-----------------+--------------+
+| Las Vegas       |         1561 |
+| Phoenix         |         1001 |
+| Toronto         |          985 |
+| Scottsdale      |          497 |
+| Charlotte       |          468 |
+| Pittsburgh      |          353 |
+| Montréal        |          337 |
+| Mesa            |          304 |
+| Henderson       |          274 |
+| Tempe           |          261 |
+| Edinburgh       |          239 |
+| Chandler        |          232 |
+| Cleveland       |          189 |
+| Gilbert         |          188 |
+| Glendale        |          188 |
+| Madison         |          176 |
+| Mississauga     |          150 |
+| Stuttgart       |          141 |
+| Peoria          |          105 |
+| Markham         |           80 |
+| Champaign       |           71 |
+| North Las Vegas |           70 |
+| North York      |           64 |
+| Surprise        |           60 |
+| Richmond Hill   |           54 |
++-----------------+--------------+
+
+6. Find the distribution of star ratings to the business in the following cities:
+
+        i. Avon
+        
+Sample Code
+----
+        
+Select
+stars,
+review_count
+From business
+Where city = 'Avon'
+Order by stars
+
++-------+--------------+
+| stars | review_count |
++-------+--------------+
+|   1.5 |           10 |
+|   2.5 |            3 |
+|   2.5 |            3 |
+|   3.5 |            7 |
+|   3.5 |           31 |
+|   3.5 |           50 |
+|   4.0 |            4 |
+|   4.0 |           17 |
+|   4.5 |           31 |
+|   5.0 |            3 |
++-------+--------------+
+
+        ii. Beachwood
+
+Sample Code
+----
+
+Select
+stars,
+review_count as count
+From business
+Where city = 'Beachwood'
+Order by stars
+
++-------+-------+
+| stars | count |
++-------+-------+
+|   2.0 |     8 |
+|   2.5 |     3 |
+|   3.0 |     8 |
+|   3.0 |     3 |
+|   3.5 |     3 |
+|   3.5 |     3 |
+|   4.0 |    69 |
+|   4.5 |    14 |
+|   4.5 |     3 |
+|   5.0 |     6 |
+|   5.0 |     4 |
+|   5.0 |     6 |
+|   5.0 |     3 |
+|   5.0 |     4 |
++-------+-------+
+
+7. Find the top 3 users based on their total number of reviews:
+
+Sample Code
+----
+
+Select
+name,
+review_count
+From user
+Order by review_count DESC
+
++--------+--------------+
+| name   | review_count |
++--------+--------------+
+| Gerald |         2000 |
+| Sara   |         1629 |
+| Yuri   |         1339 |
++--------+--------------+
+
+8. Does posing more reviews correlate with more fans?
+
+Answer
+
+The answer is no. More reviews does not correlate with more fans. 
+For example Sara has 50 fans with 1629 reviews in confront of William which has 126 fans with 1215 reviews.
+
+Sample Code
+----
+
+Select
+name,
+review_count,
+fans
+From user
+Order by review_count DESC
+
++-----------+--------------+------+
+| name      | review_count | fans |
++-----------+--------------+------+
+| Gerald    |         2000 |  253 |
+| Sara      |         1629 |   50 |
+| Yuri      |         1339 |   76 |
+| .Hon      |         1246 |  101 |
+| William   |         1215 |  126 |
+| Harald    |         1153 |  311 |
+| eric      |         1116 |   16 |
+| Roanna    |         1039 |  104 |
+| Mimi      |          968 |  497 |
+| Christine |          930 |  173 |
+| Ed        |          904 |   38 |
+| Nicole    |          864 |   43 |
+| Fran      |          862 |  124 |
+| Mark      |          861 |  115 |
+| Christina |          842 |   85 |
+| Dominic   |          836 |   37 |
+| Lissa     |          834 |  120 |
+| Lisa      |          813 |  159 |
+| Alison    |          775 |   61 |
+| Sui       |          754 |   78 |
+| Tim       |          702 |   35 |
+| L         |          696 |   10 |
+| Angela    |          694 |  101 |
+| Crissy    |          676 |   25 |
+| Lyn       |          675 |   45 |
++-----------+--------------+------+
+
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+Answer
+
+For the word “love” there are 1780 reviews – For the word “hate” there are 232 reviews.
+
+Sample Code
+----
+
+Select
+count (*)
+From review
+Where text like '%love%' 
+
++-----------+
+| count (*) |
++-----------+
+|      1780 |
++-----------+
+Select
+count (*)
+From review
+Where text like '%hate%'
+
++-----------+
+| count (*) |
++-----------+
+|       232 |
++-----------+
+
+10. Find the top 10 users with the most fans:
+
+Sample Code
+----
+
+Select
+id,
+name,
+fans
+From user
+Order by fans DESC
+
++------------------------+-----------+------+
+| id                     | name      | fans |
++------------------------+-----------+------+
+| -9I98YbNQnLdAmcYfb324Q | Amy       |  503 |
+| -8EnCioUmDygAbsYZmTeRQ | Mimi      |  497 |
+| --2vR0DIsmQ6WfcSzKWigw | Harald    |  311 |
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald    |  253 |
+| -0IiMAZI2SsQ7VmyzJjokQ | Christine |  173 |
+| -g3XIcCb2b-BD0QBCcq2Sw | Lisa      |  159 |
+| -9bbDysuiWeo2VShFJJtcw | Cat       |  133 |
+| -FZBTkAZEXoP7CYvRV2ZwQ | William   |  126 |
+| -9da1xk7zgnnfO1uTVYGkA | Fran      |  124 |
+| -lh59ko3dxChBSZ9U7LfUw | Lissa     |  120 |
++------------------------+-----------+------+
+
+Part 2: Inferences and Analysis
+
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+City = Toronto					  Category = Shopping
+
+i. Do the two groups you chose to analyze have a different distribution of hours?
+
+Answer    YES
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+
+Answer    YES
+
+Sample Code
+----
+
+Select
+b.name
+, b.city
+, c.category
+, b.stars
+, h.hours
+, b.review_count
+, b.postal_code
+From business b 
+inner join category c 
+on b.id = c.business_id
+inner join hours h 
+on h.business_id = c.business_id
+Where b.city = 'Toronto' 
+ Group by b.stars;
+
+
+
+
++-----------------------+---------+-----------------------+-------+----------------------+--------------+
+| name                  | city    | category              | stars | hours                | review_count |
++-----------------------+---------+-----------------------+-------+----------------------+--------------+
+| 99 Cent Sushi         | Toronto | Restaurants           |   2.0 | Saturday|11:00-23:00 |            5 |
+| The Fox & Fiddle      | Toronto | Bars                  |   2.5 | Saturday|10:00-2:00  |           35 |
+| The Gym at 99 Sudbury | Toronto | Yoga                  |   3.0 | Saturday|8:00-20:00  |           14 |
+| The Charlotte Room    | Toronto | Venues & Event Spaces |   3.5 | Saturday|18:00-2:00  |           10 |
+| Edulis                | Toronto | Restaurants           |   4.0 | Saturday|18:00-23:00 |           89 |
+| Good Gosh Beauty      | Toronto | Beauty & Spas         |   4.5 | Monday|11:30-18:00   |            6 |
+| Innercity MMA         | Toronto | Active Life           |   5.0 | Monday|17:00-22:00   |            3 |
++-----------------------+---------+-----------------------+-------+----------------------+--------------+
++-------------+
+| postal_code |
++-------------+
+| M5B 2E5     |
+| M4K 1P7     |
+| M6J 3S7     |
+| M5V 2H5     |
+| M5V         |
+| M4C 3V6     |
+| M5T 1G6     |
++-------------+
+
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+
+i. Difference 1:
+
+   The rate of the open restaurant is too much.
+
+ii. Difference 2:
+
+    The restaurant which is still open has a high number of reviews
+
+
+Sample Code
+----
+
+Select
+b.name
+, b.is_open
+, c.category
+, b.stars
+, h.hours
+, b.review_count
+, b.postal_code
+From business b
+inner join category c 
+on b.id = c.business_id 
+inner join hours h 
+on h.business_id = c.business_id
+Where b.city = 'Toronto' 
+Group by b.is_open;
+
++---------------+---------+-------------+-------+----------------------+--------------+
+| name          | is_open | category    | stars | hours                | review_count |
++---------------+---------+-------------+-------+----------------------+--------------+
+| 99 Cent Sushi |       0 | Restaurants |   2.0 | Saturday|11:00-23:00 |            5 |
+| Edulis        |       1 | Restaurants |   4.0 | Saturday|18:00-23:00 |           89 |
++---------------+---------+-------------+-------+----------------------+--------------+
++-------------+
+| postal_code |
++-------------+
+| M5B 2E5     |
+| M5V         |
++-------------+
+
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+
+i. Indicate the type of analysis you chose to do:
+
+   Finding the Business who have obtained the max rate of stars and have a review with “%recommend%” word in it.
+
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+    I choose this data for analysis because I want to know which business is performing well by stars rate and the good review.
+
+Sample Code
+----
+
+Select
+b.name as NameofBusiness,
+b.address,
+b.city,
+b.postal_code,
+b.stars,
+r.text as ReviewText
+From business b
+    inner join review r
+        on b.id = r.business_id
+Where ReviewText like '%recommend%'
+Order by b.stars DESC
